@@ -5,9 +5,17 @@ func responseMethod(message string, code int, success bool, data string) {
 		message string
 		code    int
 		success bool
-		data    interface{}
+		// data    interface{}
 	}
+	// Handle ...
 
-	p1 := Person{message: message, code: code, success: success, data: data}
-	return p1
+}
+
+func responseObject(message string, code int, success bool) (map[string]interface{}, error) {
+	return map[string]interface{}{
+			"message": message,
+			"code":    code,
+			"body":    success,
+		},
+		nil
 }

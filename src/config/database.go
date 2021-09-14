@@ -8,7 +8,7 @@ import (
 )
 
 func Database() {
-	_ = mgm.SetDefaultConfig(nil, "check_echo", options.Client().ApplyURI("mongodb://localhost:27017/myDatabase"))
+	_ = mgm.SetDefaultConfig(nil, "golangapi", options.Client().ApplyURI("mongodb://localhost:27017/myDatabase"))
 	fmt.Println("Database connected successfully.")
 
 }
