@@ -12,6 +12,7 @@ func main() {
 	config.Database()
 
 	router := e.Group("/admin")
+
 	router.POST("/create-user", user.Creates)
 	router.GET("/get-user", user.GetAllUsers)
 	// router.DELETE("/delete", user.DeletesUser)
