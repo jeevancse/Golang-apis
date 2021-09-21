@@ -9,20 +9,9 @@ import (
 
 	"github.com/kamva/mgm/v3"
 	"github.com/labstack/echo"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"gopkg.in/mgo.v2/bson"
 )
-
-func DeletesUser(c context.Context) error {
-	type M map[string]interface{}
-	user := mgm.Coll(&models.User{})
-	result, err := user.DeleteOne(context.Background(), bson.M{"_id": "6145d7c291663049013f346c"})
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(result)
-	return nil
-
-}
 
 func Creates(c echo.Context) error {
 	type M map[string]interface{}
@@ -70,4 +59,39 @@ func GetAllUsers(c echo.Context) error {
 	}
 	return c.JSON(http.StatusCreated, M{"code": 200, "resp": episodes, "message": "User get successfully"})
 
+}
+
+func DeletesUser(c echo.Context) error {
+
+	id := c.Param("userId")
+	fmt.Println(id)
+	type M map[string]interface{}
+	user := mgm.Coll(&models.User{})
+	idPrimitive, err := primitive.ObjectIDFromHex(id)
+	result, err := user.DeleteOne(context.Background(), bson.M{"_id": idPrimitive})
+	if err != nil {
+		log.Fatal(err)
+	}
+	// if result != nil {
+	return c.JSON(http.StatusOK, M{"code": 200, "resp": result, "message": "User deleted successfully"})
+	// }
+
+	// return nil
+
+}
+
+func GetuserById(c echo.Context) error {
+	userId := c.Param("userId")
+	id, err := primitive.ObjectIDFromHex(userId)
+	if err != nil {
+		log.Fatal(err)
+	}
+	type M map[string]interface{}
+	user := mgm.Coll(&models.User{})
+	var podcast bson.M
+	err = user.FindOne(context.Background(), bson.M{"_id": id}).Decode(&podcast)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return c.JSON(http.StatusOK, M{"code": 200, "resp": podcast, "message": "User get successfully"})
 }
